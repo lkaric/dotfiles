@@ -1,0 +1,47 @@
+{{- if (eq .chezmoi.os "darwin") -}}
+#!/bin/bash
+
+set -eufo pipefail
+
+{{
+    $brews := list
+        "curl"
+        "git"
+        "git-lfs"
+        "tmux"
+        "wget"
+        "shellcheck"
+        "bitwarden-cli"
+}}
+
+{{
+    $casks := list
+        "iterm2"
+        "arc"
+        "spotify"
+        
+}}
+
+{{ if .personal -}}
+
+{{
+    $casks = concat $casks (list
+          "viber"
+          "raycast"
+        )
+-}}
+
+{{ end -}}
+
+set +e
+brew bundle --no-lock --file=/dev/stdin <<EOF
+{{ range ($brews | sortAlpha | uniq) -}}
+brew "{{ . }}"
+{{ end -}}
+{{ range ($casks | sortAlpha | uniq) -}}
+cask "{{ . }}"
+{{ end -}}
+EOF
+set -e
+
+{{ end -}}

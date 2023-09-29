@@ -1,0 +1,9 @@
+{{/* Feature flags */}}
+{{- $personal := true -}}{{/* Machine contains sensitive information  */}}
+{{- "" -}}
+
+[data]
+personal = {{ $personal }}
+
+[diff]
+exclude = ["externals"]
