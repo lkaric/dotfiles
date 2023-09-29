@@ -1,0 +1,91 @@
+source $(brew --prefix)/share/powerlevel10k/powerlevel10k.zsh-theme
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
+###############################################################################
+# General                                                                     #
+###############################################################################
+
+setopt promptsubst
+
+# Set the default editor
+export EDITOR='nvim'
+
+
+# Set the aliases for nvimm
+alias vi="nvim"
+alias vim="nvim"
+
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+export RIPGREP_CONFIG_PATH=~/.config/ripgrep/config
+
+plugins=(fzf)
+
+
+###############################################################################
+# History                                                                     #
+###############################################################################
+
+export HISTFILE="${HOME}/.zsh_history"
+export HISTSIZE=10000000
+export SAVEHIST=${HISTSIZE}
+setopt BANG_HIST                 # Treat the '!' character specially during expansion.
+setopt EXTENDED_HISTORY          # Write the history file in the ":start:elapsed;command" format.
+setopt INC_APPEND_HISTORY        # Write to the history file immediately, not when the shell exits.
+setopt SHARE_HISTORY             # Share history between all sessions.
+setopt HIST_EXPIRE_DUPS_FIRST    # Expire duplicate entries first when trimming history.
+setopt HIST_IGNORE_DUPS          # Don't record an entry that was just recorded again.
+setopt HIST_FIND_NO_DUPS         # Do not display a line previously found.
+setopt HIST_IGNORE_SPACE         # Don't record an entry starting with a space.
+setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
+setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
+
+
+###############################################################################
+# asdf                                                                        #
+###############################################################################
+
+if ! command -v asdf &> /dev/null; then
+    # Install ASDF using Homebrew
+    brew install asdf
+
+    # Enable in current terminal
+    source $(brew --prefix asdf)/asdf.sh
+
+    # Install ASDF completions for Zsh
+    cp -vf "$(brew --prefix asdf)/completions/_asdf" "${HOME}/.zsh/completions"
+
+    # Add necessary plugins
+    asdf plugin add nodejs
+
+    # Install all the necessary plugins and versions
+    asdf install
+fi
+
+export FZF_BASE=/opt/homebrew/opt/fzf
+export DISABLE_FZF_AUTO_COMPLETION="false"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+source $(brew --prefix asdf)/libexec/asdf.sh
+
+###############################################################################
+# fzf                                                                         #
+###############################################################################
+
+
+if ! command -v fzf &> /dev/null; then
+    # Install fzf using Homebrew
+    brew install fzf
+
+    # Install useful key bindings
+    source $(brew --prefix fzf)/install
+fi
+
+
+
+
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
