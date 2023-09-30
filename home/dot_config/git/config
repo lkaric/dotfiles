@@ -1,6 +1,6 @@
 [user]
 	name = Lazar Karic
-	email = hi@lazar.sh
+	email = 16634314+lkaric@users.noreply.github.com
 [advice]
 	addEmptyPathspec = false
 	pushNonFastForward = false
@@ -88,4 +88,3 @@
 	fsckobjects = true
 [trim]
 	bases = master,gh-pages
-{{/* vim: set filetype=gitconfig: */}}
