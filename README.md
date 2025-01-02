@@ -15,7 +15,7 @@ Before you begin, make sure you have the following prerequisites installed on yo
 Initial setup
 
 ```sh
-$chezmoi init --apply lkaric
+$ chezmoi init --apply lkaric
 ```
 
 Pull the latest changes
