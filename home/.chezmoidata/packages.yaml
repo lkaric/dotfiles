@@ -1,0 +1,17 @@
+packages:
+  darwin:
+    brews:
+    - 'curl'
+    - 'git'
+    - 'coreutils'
+    - 'neovim'
+    - 'tmux'
+    - 'fzf'
+    - 'starship'
+    - 'sheldon'
+    casks:
+    - 'ghostty'
+    - 'google-chrome'
+    - 'spotify'
+    - 'google-chrome'
+    - 'rectangle'

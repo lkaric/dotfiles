@@ -1,0 +1,18 @@
+# Autoload compinit;
+autoload -Uz compinit
+compinit
+
+# Set the default editor
+export EDITOR='nvim'
+
+# Set the aliases for nvimm
+alias vi="nvim"
+alias vim="nvim"
+
+# Initiate sheldon;
+eval "$(sheldon source)"
+
+
+# Initiate starship;
+eval "$(starship init zsh)"
+
