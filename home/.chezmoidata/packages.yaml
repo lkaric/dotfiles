@@ -3,6 +3,7 @@ packages:
     brews:
     - 'curl'
     - 'git'
+    - 'minikube'
     - 'coreutils'
     - 'neovim'
     - 'tmux'
@@ -11,7 +12,10 @@ packages:
     - 'sheldon'
     casks:
     - 'ghostty'
+    - 'docker'
     - 'google-chrome'
     - 'spotify'
     - 'google-chrome'
     - 'rectangle'
+    - 'visual-studio-code'
+    - 'raycast'
