@@ -17,9 +17,8 @@
       # Keep `nrs` fast: no brew update/upgrade on every switch. `nup` does it.
       autoUpdate = false;
       upgrade = false;
-      # "none" while migrating; flip to "zap" once the declared set is final
-      # so anything undeclared is uninstalled (and stays uninstalled).
-      cleanup = "none";
+      # Anything not declared here is uninstalled on switch (and stays gone).
+      cleanup = "zap";
     };
 
     taps = [ "supercmdlabs/supercmd" ];

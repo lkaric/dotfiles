@@ -32,7 +32,13 @@ in
 
     includes = map (condition: {
       inherit condition;
-      contents.user = hiveyard;
+      contents = {
+        user = hiveyard;
+        # TODO: flip to true once keys/hiveyard.pub is registered as a Signing
+        # key on the work GitHub account (unverified signatures can be rejected
+        # by branch protection).
+        commit.gpgsign = false;
+      };
     }) hiveyardRemotes;
 
     ignores = [
