@@ -25,9 +25,9 @@ in
     signing = {
       format = "ssh";
       key = "~/.ssh/personal.pub";
-      # Flip to true in phase 4, once both keys are served by the Bitwarden
-      # agent and the pubkeys are registered as signing keys on GitHub.
-      signByDefault = false;
+      # Both pubkeys must be registered as Signing keys on GitHub for the
+      # Verified badge; locally keys/allowed_signers verifies them.
+      signByDefault = true;
     };
 
     includes = map (condition: {
