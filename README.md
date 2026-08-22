@@ -49,10 +49,10 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 
 ### AI agents
 
-| Tool             | What for                                             | Install                | Config                                                | Rebuild? |
-| ---------------- | ---------------------------------------------------- | ---------------------- | ----------------------------------------------------- | -------- |
-| Oh My Pi (`omp`) | terminal coding agent                                | flake (`programs.omp`) | `~/.omp/agent/` (mutable, see `config/omp/README.md`) | no       |
-| Herdr            | agent workspace manager / multiplexer (prefix `C-b`) | flake                  | `config/herdr/config.toml`                            | no       |
+| Tool             | What for                                             | Install                | Config                                                                                                                         | Rebuild? |
+| ---------------- | ---------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------- |
+| Oh My Pi (`omp`) | terminal coding agent                                | flake (`programs.omp`) | `config/omp/settings.yml` (policy overlay via `PI_CONFIG_FILES`) + `~/.omp/agent/` (mutable state); see `config/omp/README.md` | no       |
+| Herdr            | agent workspace manager / multiplexer (prefix `C-b`) | flake                  | `config/herdr/config.toml`                                                                                                     | no       |
 
 ### Dev runtimes and git
 

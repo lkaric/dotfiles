@@ -16,4 +16,12 @@ in
     "atuin/config.toml".source = link "atuin/config.toml";
     "herdr/config.toml".source = link "herdr/config.toml";
   };
+
+  # omp reads these but never writes them, so they are safe to symlink into the
+  # otherwise-mutable ~/.omp. Settings live in config/omp/settings.yml, loaded
+  # via PI_CONFIG_FILES (modules/home/agents.nix) rather than symlinked over
+  # config.yml, which omp rewrites.
+  home.file = {
+    ".omp/agent/agents".source = link "omp/agents";
+  };
 }
