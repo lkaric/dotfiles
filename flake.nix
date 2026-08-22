@@ -80,6 +80,7 @@
         };
       };
 
-      formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt;
+      # `nix fmt` formats every .nix file in the tree (treefmt-based wrapper).
+      formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.nixfmt-tree;
     };
 }
