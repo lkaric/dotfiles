@@ -91,6 +91,15 @@
         DisableFirefoxStudies = true;
         DisablePocket = true;
         DontCheckDefaultBrowser = false;
+        # Bitwarden owns passwords: built-in manager off, extension forced.
+        PasswordManagerEnabled = false;
+        OfferToSaveLogins = false;
+        ExtensionSettings = {
+          "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
+            installation_mode = "force_installed";
+            install_url = "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi";
+          };
+        };
       };
     };
   };

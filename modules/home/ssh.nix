@@ -1,4 +1,4 @@
-{ user, ... }:
+{ lib, user, ... }:
 let
   agent = "${user.home}/.bitwarden-ssh-agent.sock";
 in
@@ -13,28 +13,29 @@ in
     enable = true;
     enableDefaultConfig = false;
 
-    matchBlocks = {
-      "*" = {
-        identityAgent = agent;
-        addKeysToAgent = "no";
-        serverAliveInterval = 60;
-        hashKnownHosts = false;
-        userKnownHostsFile = "~/.ssh/known_hosts";
-      };
-
+    # Attribute names are `Host` patterns, values are raw OpenSSH keywords.
+    settings = {
       # Personal (github.com/lkaric and everything else on GitHub)
       "github.com" = {
-        user = "git";
-        identityFile = "~/.ssh/personal";
-        identitiesOnly = true;
+        User = "git";
+        IdentityFile = "~/.ssh/personal";
+        IdentitiesOnly = "yes";
       };
 
       # Work (github.com/mladenctrl); git rewrites github.com:mladenctrl/ here.
       "github-hiveyard" = {
-        hostname = "github.com";
-        user = "git";
-        identityFile = "~/.ssh/hiveyard";
-        identitiesOnly = true;
+        HostName = "github.com";
+        User = "git";
+        IdentityFile = "~/.ssh/hiveyard";
+        IdentitiesOnly = "yes";
+      };
+
+      "*" = lib.hm.dag.entryAfter [ "github.com" "github-hiveyard" ] {
+        IdentityAgent = agent;
+        AddKeysToAgent = "no";
+        ServerAliveInterval = 60;
+        HashKnownHosts = "no";
+        UserKnownHostsFile = "~/.ssh/known_hosts";
       };
     };
   };

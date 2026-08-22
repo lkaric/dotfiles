@@ -1,4 +1,5 @@
 {
+  config,
   pkgs,
   user,
   host,
@@ -10,6 +11,7 @@ in
 {
   programs.zsh = {
     enable = true;
+    dotDir = config.home.homeDirectory; # keep ~/.zshrc (HM default is changing)
     enableCompletion = true;
     # sheldon provides autosuggestions + syntax highlighting (see
     # config/sheldon/plugins.toml), so the HM variants stay off.

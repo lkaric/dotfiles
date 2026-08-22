@@ -76,7 +76,7 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 | --- | --- | --- | --- | --- |
 | Zen | browser | cask | policies via `system.defaults.CustomUserPreferences."app.zen-browser.zen"`, rest via Firefox Sync | yes (policies) |
 | SuperCmd v2 | launcher, clipboard, snippets, Raycast extensions | cask (tap `supercmdlabs/supercmd`) | in-app for now (see FAQ) | - |
-| Bitwarden | passwords + SSH agent | cask | in-app (enable SSH agent once) | - |
+| Bitwarden | passwords, autofill (system + Zen), SSH agent | cask | in-app (SSH agent, browser integration); Zen policy installs the extension | - |
 | Rectangle | window snapping | cask | `CustomUserPreferences."com.knollsoft.Rectangle"` | yes |
 | Caffeinated | keep awake | mas | `CustomUserPreferences."design.yugen.Caffeinated"` | yes |
 | Spotify, Discord, Slack | the usual | cask | account-synced | - |
@@ -110,7 +110,7 @@ indented line.
 
 3. Clone the repo over https (no ssh keys yet).
    ```sh
-   mkdir -p ~/git && git clone https://github.com/lkaric/dotfiles ~/git/dotfiles && cd ~/git/dotfiles
+   mkdir -p ~/git && git clone https://github.com/<you>/dotfiles ~/git/dotfiles && cd ~/git/dotfiles
    ```
 
 4. First switch. This installs Homebrew (nix-homebrew), every cask and App Store app, fonts, macOS defaults, the wallpaper, your shell, and all CLI tools. It takes a while the first time (Herdr and omp build from source).
@@ -127,16 +127,16 @@ indented line.
 
 6. Switch the repo remote to ssh and test both identities.
    ```sh
-   git remote set-url origin git@github.com:lkaric/dotfiles.git
+   git remote set-url origin git@github.com:<you>/dotfiles.git
    ssh -T git@github.com
    ssh -T git@github-hiveyard
    ```
-   > `Hi lkaric!` and `Hi mladenctrl!`
+   > both print `Hi <account>! You've successfully authenticated` with the matching account
 
 7. GitHub CLI, both accounts.
    ```sh
-   gh auth login -h github.com   # lkaric, ssh, browser
-   gh auth login -h github.com   # mladenctrl, ssh, browser
+   gh auth login -h github.com   # personal account, ssh, browser
+   gh auth login -h github.com   # work account, ssh, browser
    gh auth status
    ```
    > both accounts listed; switch with `gh auth switch`.
@@ -161,7 +161,9 @@ indented line.
 11. Things that cannot be declared (one-time, in-app):
     - [ ] Zen: sign in to Firefox Sync (bookmarks, extensions, settings)
     - [ ] SuperCmd: grant Accessibility + Screen Recording when asked, set hotkey, sign out of Raycast habits
-    - [ ] Bitwarden: unlock method (Touch ID), vault timeout
+    - [ ] Bitwarden: unlock with Touch ID, vault timeout, Settings -> "Enable browser integration"
+    - [ ] macOS: System Settings -> General -> AutoFill & Passwords: turn **Bitwarden** on, turn iCloud Passwords/Keychain autofill off (Bitwarden is the only password manager)
+    - [ ] Zen: the Bitwarden extension is force-installed by policy and the built-in password manager is disabled; sign in to the extension once
     - [ ] Rectangle, Caffeinated: allow Accessibility / login items when prompted
     - [ ] Spotify, Discord, Slack: sign in
     - [ ] Terminal -> System Events automation prompt (wallpaper step): allow
@@ -170,7 +172,7 @@ indented line.
 12. Sanity checklist:
     - [ ] `nrs` a second time changes nothing and finishes in seconds
     - [ ] `readlink ~/.config/nvim` points into `~/git/dotfiles/config/nvim`
-    - [ ] `git log --show-signature -1` in a personal repo and in a mladenctrl repo show the right key
+    - [ ] `git log --show-signature -1` in a personal repo and in a work repo show the right key
     - [ ] `brew list --cask` equals the cask list in `modules/darwin/homebrew.nix`
     - [ ] `fc-list | grep -i "JetBrainsMono Nerd"` prints fonts
 
@@ -214,17 +216,20 @@ Rollback after a bad update: see ⏪.
 
 ## 🔐 Identities
 
-| Identity | GitHub | Key (Bitwarden item / pubkey) | Triggered by |
-| --- | --- | --- | --- |
-| personal (default) | `lkaric` | `personal` / `keys/personal.pub` | every remote not listed below |
-| hiveyard | `mladenctrl` | `hiveyard` / `keys/hiveyard.pub` | any remote under `github.com/mladenctrl/` (ssh or https) |
+Two git/ssh identities, chosen by remote URL. Names, emails, usernames and the
+work org live in `modules/home/git.nix` and `modules/home/ssh.nix` only.
 
-- Clone work repos normally: `git clone git@github.com:mladenctrl/<repo>`; git rewrites the host to `github-hiveyard` and uses the hiveyard key, and `includeIf` switches name/email/signing key. Check with `git config user.email` inside the repo.
+| Identity | Key (Bitwarden item / pubkey) | ssh host alias | Triggered by |
+| --- | --- | --- | --- |
+| personal (default) | `personal` / `keys/personal.pub` | `github.com` | every remote not matched below |
+| hiveyard (work) | `hiveyard` / `keys/hiveyard.pub` | `github-hiveyard` | any remote under the work org on GitHub (ssh or https) |
+
+- Clone work repos normally with the `github.com` URL; git rewrites the host to `github-hiveyard` (work key) and `includeIf` switches name/email/signing key. Check with `git config user.email` inside the repo.
 - Signing: `gpg.format = ssh`, `commit.gpgsign` (enabled in `modules/home/git.nix` once both pubkeys are registered as **Signing keys** on GitHub). Local verification uses `keys/allowed_signers`.
 - All keys are served by the Bitwarden SSH agent (`SSH_AUTH_SOCK` and `IdentityAgent` point at `~/.bitwarden-ssh-agent.sock`). No private keys on disk.
 - New key: Bitwarden -> New item -> SSH key (generate or import), copy the public key into `keys/<name>.pub`, add to `keys/allowed_signers`, reference it in `modules/home/ssh.nix` (and `git.nix` if it signs), `nrs`, add it on GitHub.
 - Rotate: same as above, then delete the old item and pubkey.
-- `gh` has both accounts: `gh auth switch -u lkaric|mladenctrl`.
+- `gh` knows both accounts: `gh auth switch`.
 
 ## 📦 Adding things
 
