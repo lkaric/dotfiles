@@ -1,0 +1,10 @@
+# Colima profile template (~/.colima/_templates/default.yaml). Used when a
+# profile is created; for an existing profile: `colima start --edit`.
+cpu: 4
+memory: 8
+disk: 60
+vmType: vz
+rosetta: true
+mountType: virtiofs
+runtime: docker
+autoActivate: true

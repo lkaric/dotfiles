@@ -1,0 +1,12 @@
+# Global mise config (https://mise.jdx.dev/configuration.html).
+# `mise use -g <tool>@<version>` edits this file; commit the result.
+[tools]
+node = "lts"
+bun = "latest"
+pnpm = "latest"
+rust = "stable"
+"npm:@nestjs/cli" = "latest"
+
+[settings]
+# honour .nvmrc / .node-version in projects
+idiomatic_version_file_enable_tools = ["node"]

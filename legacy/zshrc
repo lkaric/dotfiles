@@ -1,0 +1,21 @@
+# ~/.zshrc
+autoload -Uz compinit
+compinit
+
+eval "$(sheldon source)"
+eval "$(starship init zsh)"
+# The following lines have been added by Docker Desktop to enable Docker CLI completions.
+fpath=(/Users/lkaric/.docker/completions $fpath)
+autoload -Uz compinit
+compinit
+# End of Docker CLI completions
+eval "$(fnm env --use-on-cd --shell zsh)"
+
+export PATH="$HOME/.local/bin:$PATH"
+
+# bun completions
+[ -s "/Users/lkaric/.bun/_bun" ] && source "/Users/lkaric/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"

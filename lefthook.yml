@@ -1,0 +1,23 @@
+# Formatters run on staged files only and re-stage their fixes.
+# Skip once with: LEFTHOOK=0 git commit ...
+pre-commit:
+  parallel: true
+  commands:
+    nixfmt:
+      glob: "*.nix"
+      run: nixfmt {staged_files}
+      stage_fixed: true
+    stylua:
+      glob: "*.lua"
+      run: stylua {staged_files}
+      stage_fixed: true
+    taplo:
+      glob: "*.toml"
+      run: taplo fmt {staged_files}
+      stage_fixed: true
+    prettier:
+      glob: "*.{md,yml,yaml,json}"
+      exclude:
+        - config/nvim/lazy-lock.json
+      run: prettier --write {staged_files}
+      stage_fixed: true

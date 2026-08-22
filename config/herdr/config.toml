@@ -1,0 +1,3 @@
+# Herdr (https://herdr.dev/docs/configuration/). Empty = defaults.
+# Print everything available with `herdr --default-config`.
+# Apply edits to a running server: `herdr server reload-config`.

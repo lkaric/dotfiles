@@ -1,0 +1,12 @@
+# atuin (https://docs.atuin.sh/configuration/config/). Up-arrow stays native;
+# ctrl-r opens atuin.
+style = "compact"
+inline_height = 20
+enter_accept = true
+filter_mode = "global"
+filter_mode_shell_up_key_binding = "session"
+search_mode = "fuzzy"
+show_help = false
+# sync is opt-in: `atuin register` / `atuin login`, then set auto_sync = true
+auto_sync = false
+update_check = false
