@@ -6,7 +6,9 @@
   networking = {
     hostName = "hephaestus";
     computerName = "hephaestus";
-    localHostName = "hephaestus";
+    # Bonjour name (<name>.local). hephaestus.local is taken by another device
+    # on the home LAN, so this one is different on purpose.
+    localHostName = "lkaric";
   };
 
   system.primaryUser = user.name;
