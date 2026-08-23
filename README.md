@@ -42,10 +42,11 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 
 ### Editor
 
-| Tool                           | What for                  | Install                     | Config                                                      | Rebuild? |
-| ------------------------------ | ------------------------- | --------------------------- | ----------------------------------------------------------- | -------- |
-| Neovim + LazyVim               | editor                    | nix                         | `config/nvim/` (starter layout, `lazy-lock.json` committed) | no       |
-| JetBrainsMono Nerd Font, Inter | terminal/editor icons, UI | nix-darwin `fonts.packages` | `modules/darwin/fonts.nix`                                  | yes      |
+| Tool                           | What for                     | Install                     | Config                                                      | Rebuild?                 |
+| ------------------------------ | ---------------------------- | --------------------------- | ----------------------------------------------------------- | ------------------------ |
+| Neovim + LazyVim               | editor                       | nix                         | `config/nvim/` (starter layout, `lazy-lock.json` committed) | no                       |
+| Zed                            | GUI editor, omp as ACP agent | cask                        | `config/zed/settings.json` (Zed rewrites it at runtime)     | cask list yes, config no |
+| JetBrainsMono Nerd Font, Inter | terminal/editor icons, UI    | nix-darwin `fonts.packages` | `modules/darwin/fonts.nix`                                  | yes                      |
 
 ### AI agents
 
