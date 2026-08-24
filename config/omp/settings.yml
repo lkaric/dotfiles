@@ -53,12 +53,14 @@ lsp:
   diagnosticsOnEdit: true
 
 # Relay mode drives your own logged-in Chrome instead of a credential-less
-# headless Chromium. The extension is already unpacked at
-# ~/.omp/browser-relay/extension, but there is no Chrome on this host (see the
-# casks list). To enable: add "google-chrome" to casks, load the unpacked
-# extension at chrome://extensions with Developer mode on, then set:
+# headless Chromium. Chrome is now declared in casks and the extension is
+# unpacked at ~/.omp/browser-relay/extension, but loading an unpacked MV3
+# extension cannot be automated: open chrome://extensions, enable Developer
+# mode, "Load unpacked" that directory, then uncomment:
 #   browser:
 #     relay: true
+# Leaving this off until then is deliberate -- with relay on and no extension
+# connected, the browser tool has nothing to drive.
 
 # --- context / long sessions -------------------------------------------------
 compaction:

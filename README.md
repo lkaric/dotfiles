@@ -73,14 +73,15 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 
 ### Apps
 
-| App                     | What for                                          | Install                            | Config                                                                                            | Rebuild?       |
-| ----------------------- | ------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------- | -------------- |
-| Zen                     | browser                                           | cask                               | policies via `system.defaults.CustomUserPreferences."app.zen-browser.zen"`, rest via Firefox Sync | yes (policies) |
-| SuperCmd v2             | launcher, clipboard, snippets, Raycast extensions | cask (tap `supercmdlabs/supercmd`) | in-app for now (see FAQ)                                                                          | -              |
-| Bitwarden               | passwords, autofill (system + Zen), SSH agent     | cask                               | in-app (SSH agent, browser integration); Zen policy installs the extension                        | -              |
-| Rectangle               | window snapping                                   | cask                               | `CustomUserPreferences."com.knollsoft.Rectangle"`                                                 | yes            |
-| Caffeinated             | keep awake                                        | mas                                | `CustomUserPreferences."design.yugen.Caffeinated"`                                                | yes            |
-| Spotify, Discord, Slack | the usual                                         | cask                               | account-synced                                                                                    | -              |
+| App                     | What for                                            | Install                            | Config                                                                                            | Rebuild?       |
+| ----------------------- | --------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------- | -------------- |
+| Zen                     | browser                                             | cask                               | policies via `system.defaults.CustomUserPreferences."app.zen-browser.zen"`, rest via Firefox Sync | yes (policies) |
+| Google Chrome           | second browser: Claude-in-Chrome, omp browser relay | cask                               | in-app; Keystone self-updates                                                                     | -              |
+| SuperCmd v2             | launcher, clipboard, snippets, Raycast extensions   | cask (tap `supercmdlabs/supercmd`) | in-app for now (see FAQ)                                                                          | -              |
+| Bitwarden               | passwords, autofill (system + Zen), SSH agent       | cask                               | in-app (SSH agent, browser integration); Zen policy installs the extension                        | -              |
+| Rectangle               | window snapping                                     | cask                               | `CustomUserPreferences."com.knollsoft.Rectangle"`                                                 | yes            |
+| Caffeinated             | keep awake                                          | mas                                | `CustomUserPreferences."design.yugen.Caffeinated"`                                                | yes            |
+| Spotify, Discord, Slack | the usual                                           | cask                               | account-synced                                                                                    | -              |
 
 ### System
 
@@ -181,6 +182,8 @@ indented line.
     - [ ] Bitwarden: unlock with Touch ID, vault timeout, Settings -> "Enable browser integration"
     - [ ] macOS: System Settings -> General -> AutoFill & Passwords: turn **Bitwarden** on, turn iCloud Passwords/Keychain autofill off (Bitwarden is the only password manager)
     - [ ] Zen: the Bitwarden extension is force-installed by policy and the built-in password manager is disabled; sign in to the extension once
+    - [ ] Chrome: sign in, install the Claude-in-Chrome extension
+    - [ ] Chrome: for the omp browser relay, open `chrome://extensions`, enable Developer mode, "Load unpacked" -> `~/.omp/browser-relay/extension` (created by `omp browser-relay install`), then set `browser.relay: true` in `config/omp/settings.yml`
     - [ ] Rectangle, Caffeinated: allow Accessibility / login items when prompted
     - [ ] Spotify, Discord, Slack: sign in
     - [ ] Terminal -> System Events automation prompt (wallpaper step): allow
@@ -306,4 +309,4 @@ Autostart at login: set `my.colima.autostart = true` in `hosts/<name>/default.ni
 - **Why no nix-managed `~/.config/gh` or `~/.omp`?** Both tools rewrite their own files at runtime.
 - **SuperCmd settings?** Electron app, state under `~/Library/Application Support/SuperCmd/`. When it settles into a single settings file, copy it to `config/supercmd/` and add a `link` in `dotfiles.nix`.
 - **Herdr vs tmux?** Both installed. Herdr for agent sessions (mouse-first, `C-b`), tmux for plain shells (`C-a`), so prefixes do not collide.
-- **Chrome is gone; the Claude-in-Chrome extension needs it.** Add `"google-chrome"` to `casks` if you want it back.
+- **Claude-in-Chrome / omp browser relay?** Chrome is declared in `casks` for exactly these two. Zen stays the default browser; nothing forces Chrome to be one.

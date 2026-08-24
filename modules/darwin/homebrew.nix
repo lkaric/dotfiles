@@ -36,6 +36,9 @@
       # is ever removed; the repo file survives, the symlink does not.
       "zed"
       "zen"
+      # Second browser: Claude-in-Chrome and the omp browser-relay extension
+      # both need a Chromium host. Google Keystone self-updates it.
+      "google-chrome"
       "bitwarden"
       "rectangle"
       "supercmdlabs/supercmd/supercmd"
