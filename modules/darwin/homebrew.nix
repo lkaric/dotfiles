@@ -23,9 +23,11 @@
 
     taps = [ "supercmdlabs/supercmd" ];
 
-    # CLI tools come from nix. Keep this empty unless something is mac-only
-    # and missing from nixpkgs.
-    brews = [ ];
+    # CLI tools come from nix. The one exception: `mas` drives the masApps
+    # entries below, and it has to be reachable during *system* activation,
+    # where the home-manager user profile is not on PATH yet. Homebrew's own
+    # bin dir is, so it lives here rather than in home.packages.
+    brews = [ "mas" ];
 
     casks = [
       "ghostty"

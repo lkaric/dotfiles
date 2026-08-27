@@ -50,19 +50,19 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 
 ### AI agents
 
-| Tool             | What for                                             | Install                | Config                                                                                                                         | Rebuild? |
-| ---------------- | ---------------------------------------------------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------- |
-| Oh My Pi (`omp`) | terminal coding agent                                | flake (`programs.omp`) | `config/omp/settings.yml` (policy overlay via `PI_CONFIG_FILES`) + `~/.omp/agent/` (mutable state); see `config/omp/README.md` | no       |
-| Herdr            | agent workspace manager / multiplexer (prefix `C-b`) | flake                  | `config/herdr/config.toml`                                                                                                     | no       |
+| Tool             | What for                                             | Install                | Config                                                                             | Rebuild?                |
+| ---------------- | ---------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------- | ----------------------- |
+| Oh My Pi (`omp`) | terminal coding agent                                | flake (`programs.omp`) | `config/omp/` (settings, agents, skills, WATCHDOG.md) - see `config/omp/README.md` | settings yes, assets no |
+| Herdr            | agent workspace manager / multiplexer (prefix `C-b`) | flake                  | `config/herdr/config.toml`                                                         | no                      |
 
 ### Dev runtimes and git
 
-| Tool                                       | What for                                                  | Install | Config                    | Rebuild?                |
-| ------------------------------------------ | --------------------------------------------------------- | ------- | ------------------------- | ----------------------- |
-| mise                                       | runtimes: node lts, bun, pnpm, rust stable, `@nestjs/cli` | nix     | `config/mise/config.toml` | no                      |
-| git                                        | two identities by remote URL, ssh signing                 | nix     | `modules/home/git.nix`    | yes                     |
-| gh                                         | GitHub CLI, two accounts                                  | nix     | `~/.config/gh` (mutable)  | no                      |
-| lefthook + nixfmt, stylua, taplo, prettier | repo hooks and formatters                                 | nix     | `lefthook.yml`            | yes (tools), no (hooks) |
+| Tool                                       | What for                                                  | Install | Config                                                     | Rebuild?                |
+| ------------------------------------------ | --------------------------------------------------------- | ------- | ---------------------------------------------------------- | ----------------------- |
+| mise                                       | runtimes: node lts, bun, pnpm, rust stable, `@nestjs/cli` | nix     | `config/mise/config.toml`                                  | no                      |
+| git                                        | two identities by remote URL, ssh signing                 | nix     | `modules/home/git.nix`                                     | yes                     |
+| gh                                         | GitHub CLI, two accounts                                  | nix     | `config/gh/config.yml` (auth stays in mutable `hosts.yml`) | no                      |
+| lefthook + nixfmt, stylua, taplo, prettier | repo hooks and formatters                                 | nix     | `lefthook.yml` (hooks reinstalled on every switch)         | yes (tools), no (hooks) |
 
 ### Containers
 
@@ -172,7 +172,7 @@ indented line.
 10. Hooks and editor.
 
     ```sh
-    ./bootstrap.sh        # lefthook install
+    ./bootstrap.sh        # lefthook install; `nrs` already did this, harmless to repeat
     nvim                  # LazyVim syncs plugins from lazy-lock.json on first start
     ```
 
@@ -183,7 +183,7 @@ indented line.
     - [ ] macOS: System Settings -> General -> AutoFill & Passwords: turn **Bitwarden** on, turn iCloud Passwords/Keychain autofill off (Bitwarden is the only password manager)
     - [ ] Zen: the Bitwarden extension is force-installed by policy and the built-in password manager is disabled; sign in to the extension once
     - [ ] Chrome: sign in, install the Claude-in-Chrome extension
-    - [ ] Chrome: for the omp browser relay, open `chrome://extensions`, enable Developer mode, "Load unpacked" -> `~/.omp/browser-relay/extension` (created by `omp browser-relay install`), then set `browser.relay: true` in `config/omp/settings.yml`
+    - [ ] Chrome: for the omp browser relay, open `chrome://extensions`, enable Developer mode, "Load unpacked" -> `~/.omp/browser-relay/extension` (unpacked for you on every `nrs`), then uncomment `browser.relay: true` in `config/omp/settings.yml`
     - [ ] Rectangle, Caffeinated: allow Accessibility / login items when prompted
     - [ ] Spotify, Discord, Slack: sign in
     - [ ] Terminal -> System Events automation prompt (wallpaper step): allow
@@ -271,7 +271,7 @@ work org live in `modules/home/git.nix` and `modules/home/ssh.nix` only.
 `lefthook.yml` runs on staged files at pre-commit and re-stages fixes:
 nixfmt (`*.nix`), stylua (`*.lua`), taplo (`*.toml`), prettier (`*.md|yml|yaml|json`, except `lazy-lock.json`).
 
-- Install once per clone: `./bootstrap.sh` (or `lefthook install`)
+- Installed automatically on every `nrs` (`home.activation.lefthookInstall`); `./bootstrap.sh` or `lefthook install` still works for a clone you have not switched yet
 - Skip once: `LEFTHOOK=0 git commit ...`
 - Whole repo: `nix fmt` (nix) or `lefthook run pre-commit --all-files`
 

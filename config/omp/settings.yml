@@ -22,7 +22,12 @@ modelRoles:
   task: anthropic/claude-sonnet-5
   # `omp commit` message generation
   commit: anthropic/claude-haiku-4-5
-  # modelRoles.default stays in ~/.omp/agent/config.yml so /model can change it.
+  # Watchdog reviewer. advisor.enabled is true in programs.omp.settings, but
+  # the runtime only starts when this role resolves to an available model -
+  # without it the advisor reports inactive/no_model and silently does nothing.
+  advisor: anthropic/claude-haiku-4-5
+  # modelRoles.default is declared in programs.omp.settings (agents.nix) so
+  # /model can change it live; the next rebuild reasserts the declared value.
 
 # Per-agent overrides beat frontmatter `model:` but lose to task.agentModelOverrides
 # entries added at runtime. Aliases resolve through modelRoles above.
