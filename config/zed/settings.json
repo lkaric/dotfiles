@@ -1,0 +1,55 @@
+{
+  "$schema": "https://zed.dev/schema/settings/v1.json",
+
+  // Zed rewrites this file itself (theme picker, Settings Editor, onboarding,
+  // agent mode changes). It resolves the symlink first and renames over the
+  // real file, so UI changes land here in the repo -- commit or revert them.
+  "theme": {
+    "mode": "system",
+    "light": "One Light",
+    "dark": "One Dark"
+  },
+
+  "buffer_font_family": "JetBrainsMono Nerd Font",
+  "buffer_font_size": 14,
+  "ui_font_family": "Inter",
+  "ui_font_size": 15,
+
+  "tab_size": 2,
+  "hard_tabs": false,
+  "format_on_save": "on",
+  "soft_wrap": "none",
+  "autosave": "on_focus_change",
+  "vim_mode": false,
+
+  // Load-bearing: the cask sets auto_updates=true and defers to Zed's own
+  // in-app updater, so this is the only thing stopping the app from replacing
+  // itself out from under the declared cask version.
+  "auto_update": false,
+
+  "telemetry": {
+    "diagnostics": false,
+    "metrics": false
+  },
+
+  // Installed on startup into ~/Library/Application Support/Zed/extensions.
+  "auto_install_extensions": {
+    "nix": true,
+    "toml": true,
+    "lua": true,
+    "html": true
+  },
+
+  // omp as an external agent over ACP (`omp acp` speaks it on stdio).
+  // Absolute profile path, not "omp": an app launched from Finder or the Dock
+  // does not inherit the interactive shell PATH. The path is stable across
+  // generations.
+  "agent_servers": {
+    "omp": {
+      "type": "custom",
+      "command": "/etc/profiles/per-user/lkaric/bin/omp",
+      "args": ["acp"],
+      "env": {}
+    }
+  }
+}

@@ -29,6 +29,12 @@
 
     casks = [
       "ghostty"
+      # Zed ships its own CLI at /opt/homebrew/bin/zed and self-updates
+      # (cask auto_updates: true), so config/zed/settings.json pins
+      # "auto_update": false. Note the cask's zap stanza trashes
+      # ~/.config/zed, and onActivation.cleanup = "zap" runs it if this entry
+      # is ever removed; the repo file survives, the symlink does not.
+      "zed"
       "zen"
       "bitwarden"
       "rectangle"

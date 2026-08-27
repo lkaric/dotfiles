@@ -15,6 +15,9 @@ in
     "mise/config.toml".source = link "mise/config.toml";
     "atuin/config.toml".source = link "atuin/config.toml";
     "herdr/config.toml".source = link "herdr/config.toml";
+    # Zed rewrites settings.json at runtime (theme picker, Settings Editor), so
+    # it must resolve to a writable path -- mkOutOfStoreSymlink, never the store.
+    "zed/settings.json".source = link "zed/settings.json";
   };
 
   # omp reads these but never writes them, so they are safe to symlink into the
