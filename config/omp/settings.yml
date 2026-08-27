@@ -1,0 +1,86 @@
+# omp policy overlay. Loaded via PI_CONFIG_FILES (see modules/home/agents.nix).
+#
+# Precedence: defaults < ~/.omp/agent/config.yml < <cwd>/.omp/config.yml < THIS FILE < --config.
+# omp never writes here, so this file is safe to track in git -- unlike config.yml,
+# which `omp config set` and /settings rewrite in place.
+#
+# Consequence: any key set here wins over the TUI. Changing modelRoles.plan from
+# /model's Roles view will not stick; edit this file and restart omp instead.
+# Verify what is live with `omp config get <key>`.
+
+# --- model routing per task type ---------------------------------------------
+# Roles are consumed by: /model Roles view, Ctrl+P cycling (cycleOrder),
+# --plan/--smol/--slow, prewalk hand-off, and "@role" aliases in agent frontmatter.
+modelRoles:
+  # planning + architecture: 1M context, max reasoning budget
+  plan: anthropic/claude-fable-5:max
+  # thorough analysis (--slow, completion(model="slow"))
+  slow: anthropic/claude-fable-5:max
+  # cheap/fast tier: prewalk target, session titles, mechanical subagents
+  smol: anthropic/claude-haiku-4-5
+  # default subagent worker
+  task: anthropic/claude-sonnet-5
+  # `omp commit` message generation
+  commit: anthropic/claude-haiku-4-5
+  # modelRoles.default stays in ~/.omp/agent/config.yml so /model can change it.
+
+# Per-agent overrides beat frontmatter `model:` but lose to task.agentModelOverrides
+# entries added at runtime. Aliases resolve through modelRoles above.
+task:
+  agentModelOverrides:
+    scout: "@smol"
+    sonic: "@smol"
+    librarian: "@smol"
+    task: "@task"
+    reviewer: "@task"
+    security-reviewer: "@default"
+    architect: "@plan"
+  # 32 parallel subagents saturates provider limits on one laptop.
+  maxConcurrency: 8
+
+# Plan on the expensive model, implement on @smol from the first edit after the
+# todo list exists. --no-prewalk opts out for one session.
+prewalk:
+  enabled: true
+
+# --- tools -------------------------------------------------------------------
+# Structural search across 58 grammars; ships disabled.
+astGrep:
+  enabled: true
+
+# Surface type errors from `edit`, not just `write`.
+lsp:
+  diagnosticsOnEdit: true
+
+# Relay mode drives your own logged-in Chrome instead of a credential-less
+# headless Chromium. The extension is already unpacked at
+# ~/.omp/browser-relay/extension, but there is no Chrome on this host (see the
+# casks list). To enable: add "google-chrome" to casks, load the unpacked
+# extension at chrome://extensions with Developer mode on, then set:
+#   browser:
+#     relay: true
+
+# --- context / long sessions -------------------------------------------------
+compaction:
+  # Compact while idle instead of mid-turn.
+  idleEnabled: true
+  # Persist auto-generated handoff documents as handoff-<ISO>.md.
+  handoffSaveToDisk: true
+
+# --- memory ------------------------------------------------------------------
+# Local SQLite bank; provides recall/retain/reflect/memory_edit.
+# `hindsight` needs a server on localhost:8888 and gives server-side reflect
+# synthesis; mnemopi's reflect is local recall + formatting only.
+memory:
+  backend: mnemopi
+
+# --- providers ---------------------------------------------------------------
+providers:
+  # Shared across omp processes with the same config root: keeps concurrent
+  # Herdr panes from 429-ing each other.
+  maxInFlightRequests:
+    anthropic: 2
+
+# `notify` (the default) only writes to the debug log; nothing is surfaced.
+marketplace:
+  autoUpdate: auto
