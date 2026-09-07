@@ -6,8 +6,10 @@
     enable = true;
     user = user.name;
     autoMigrate = true;
-    # Third-party taps need explicit trust on Homebrew >= 4.6.
-    trust.taps = [ "supercmdlabs/supercmd" ];
+    # No third-party taps declared. If one is ever added it needs explicit
+    # trust on Homebrew >= 4.6, both here and in `homebrew.taps` below --
+    # otherwise `brew bundle cleanup` aborts on it and stops uninstalling.
+    trust.taps = [ ];
   };
 
   homebrew = {
@@ -21,7 +23,7 @@
       cleanup = "zap";
     };
 
-    taps = [ "supercmdlabs/supercmd" ];
+    taps = [ ];
 
     # CLI tools come from nix. The one exception: `mas` drives the masApps
     # entries below, and it has to be reachable during *system* activation,
@@ -31,19 +33,19 @@
 
     casks = [
       "ghostty"
-      # Zed ships its own CLI at /opt/homebrew/bin/zed and self-updates
-      # (cask auto_updates: true), so config/zed/settings.json pins
-      # "auto_update": false. Note the cask's zap stanza trashes
-      # ~/.config/zed, and onActivation.cleanup = "zap" runs it if this entry
-      # is ever removed; the repo file survives, the symlink does not.
-      "zed"
-      "zen"
-      # Second browser: Claude-in-Chrome and the omp browser-relay extension
-      # both need a Chromium host. Google Keystone self-updates it.
+      # Editor. Cursor self-updates (cask auto_updates: true); settings live in
+      # ~/Library/Application Support/Cursor/User/ and are not tracked yet.
+      "cursor"
+      # Only browser. Managed policy lives in system-defaults.nix
+      # (CustomSystemPreferences) because Chrome honours mandatory policy from
+      # the root-owned domain, not the user one.
       "google-chrome"
+      # Claude Desktop. MCP config at
+      # ~/Library/Application Support/Claude/claude_desktop_config.json.
+      "claude"
+      "obsidian"
       "bitwarden"
       "rectangle"
-      "supercmdlabs/supercmd/supercmd"
       "spotify"
       "discord"
       "slack"

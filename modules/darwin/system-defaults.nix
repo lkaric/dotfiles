@@ -11,7 +11,7 @@
       # dock on every switch (running apps still show up while open).
       persistent-apps = [
         "/Applications/Ghostty.app"
-        "/Applications/Zen.app"
+        "/Applications/Google Chrome.app"
         "/Applications/Slack.app"
         "/Applications/Discord.app"
         "/Applications/Spotify.app"
@@ -83,24 +83,27 @@
         showWelcomeWindowAtLaunch = false;
       };
 
-      # Zen is Firefox under the hood: enterprise policies can be fed through
-      # the app's preference domain instead of editing the app bundle.
-      "app.zen-browser.zen" = {
-        EnterprisePoliciesEnabled = true;
-        DisableTelemetry = true;
-        DisableFirefoxStudies = true;
-        DisablePocket = true;
-        DontCheckDefaultBrowser = false;
-        # Bitwarden owns passwords: built-in manager off, extension forced.
-        PasswordManagerEnabled = false;
-        OfferToSaveLogins = false;
-        ExtensionSettings = {
-          "{446900e4-71c2-419f-a6a7-df9c091e268b}" = {
-            installation_mode = "force_installed";
-            install_url = "https://addons.mozilla.org/firefox/downloads/latest/bitwarden-password-manager/latest.xpi";
-          };
-        };
-      };
+    };
+
+    # The attribute name is passed to `defaults write` verbatim, and system
+    # activation runs as root -- so a bare "com.google.Chrome" lands in root's
+    # own preference domain (/var/root/Library/Preferences) and Chrome never
+    # sees it. nix-darwin's own built-ins pass a full path for the same reason.
+    # /Library/Preferences is the machine-wide domain Chrome reads policy from
+    # and the .plist route Bitwarden documents for extension deployment.
+    # Verify after a switch at chrome://policy.
+    CustomSystemPreferences."/Library/Preferences/com.google.Chrome" = {
+      # Bitwarden owns passwords: built-in manager off, extension forced.
+      # nngceckbapebfimnlniiiahkandclblb is the Bitwarden extension id.
+      ExtensionInstallForcelist = [
+        "nngceckbapebfimnlniiiahkandclblb;https://clients2.google.com/service/update2/crx"
+      ];
+      PasswordManagerEnabled = false;
+      MetricsReportingEnabled = false;
+      # Chrome is the only browser, so let it own the default-browser setting.
+      DefaultBrowserSettingEnabled = true;
+      # No promo or first-run tabs.
+      PromotionalTabsEnabled = false;
     };
   };
 

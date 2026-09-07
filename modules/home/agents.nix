@@ -26,6 +26,11 @@ in
       setupVersion = 2;
 
       modelRoles.default = "anthropic/claude-opus-5";
+      # Set from /model's Roles view; declared so the next switch keeps it.
+      modelRoles.designer = "anthropic/claude-opus-5";
+
+      # Answered once in the TUI. Undeclared, it re-prompts after every switch.
+      dev.autoqaConsent = "granted";
 
       # Appearance, as answered in the setup wizard.
       theme = {

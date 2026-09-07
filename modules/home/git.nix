@@ -5,7 +5,7 @@ let
   # Work identity (GitHub account mladenctrl, org github.com/mladenctrl).
   # Change name/email here if commits should carry a different address.
   hiveyard = {
-    name = "Lazar Karić";
+    name = "Mladen Karadzić";
     email = "290313393+mladenctrl@users.noreply.github.com";
     signingkey = "~/.ssh/hiveyard.pub";
   };
