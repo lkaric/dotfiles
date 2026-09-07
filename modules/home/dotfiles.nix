@@ -15,9 +15,6 @@ in
     "mise/config.toml".source = link "mise/config.toml";
     "atuin/config.toml".source = link "atuin/config.toml";
     "herdr/config.toml".source = link "herdr/config.toml";
-    # Zed rewrites settings.json at runtime (theme picker, Settings Editor), so
-    # it must resolve to a writable path -- mkOutOfStoreSymlink, never the store.
-    "zed/settings.json".source = link "zed/settings.json";
     # gh rewrites config.yml (`gh config set`, `gh alias set`), so same rule.
     # Auth stays in the untracked sibling hosts.yml.
     "gh/config.yml".source = link "gh/config.yml";

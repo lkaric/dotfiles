@@ -31,16 +31,17 @@
 
     casks = [
       "ghostty"
-      # Zed ships its own CLI at /opt/homebrew/bin/zed and self-updates
-      # (cask auto_updates: true), so config/zed/settings.json pins
-      # "auto_update": false. Note the cask's zap stanza trashes
-      # ~/.config/zed, and onActivation.cleanup = "zap" runs it if this entry
-      # is ever removed; the repo file survives, the symlink does not.
-      "zed"
-      "zen"
-      # Second browser: Claude-in-Chrome and the omp browser-relay extension
-      # both need a Chromium host. Google Keystone self-updates it.
+      # Editor. Cursor self-updates (cask auto_updates: true); settings live in
+      # ~/Library/Application Support/Cursor/User/ and are not tracked yet.
+      "cursor"
+      # Only browser. Managed policy lives in system-defaults.nix
+      # (CustomSystemPreferences) because Chrome honours mandatory policy from
+      # the root-owned domain, not the user one.
       "google-chrome"
+      # Claude Desktop. MCP config at
+      # ~/Library/Application Support/Claude/claude_desktop_config.json.
+      "claude"
+      "obsidian"
       "bitwarden"
       "rectangle"
       "supercmdlabs/supercmd/supercmd"

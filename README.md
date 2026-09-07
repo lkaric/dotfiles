@@ -42,11 +42,11 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 
 ### Editor
 
-| Tool                           | What for                     | Install                     | Config                                                      | Rebuild?                 |
-| ------------------------------ | ---------------------------- | --------------------------- | ----------------------------------------------------------- | ------------------------ |
-| Neovim + LazyVim               | editor                       | nix                         | `config/nvim/` (starter layout, `lazy-lock.json` committed) | no                       |
-| Zed                            | GUI editor, omp as ACP agent | cask                        | `config/zed/settings.json` (Zed rewrites it at runtime)     | cask list yes, config no |
-| JetBrainsMono Nerd Font, Inter | terminal/editor icons, UI    | nix-darwin `fonts.packages` | `modules/darwin/fonts.nix`                                  | yes                      |
+| Tool                           | What for                  | Install                     | Config                                                      | Rebuild?      |
+| ------------------------------ | ------------------------- | --------------------------- | ----------------------------------------------------------- | ------------- |
+| Neovim + LazyVim               | editor                    | nix                         | `config/nvim/` (starter layout, `lazy-lock.json` committed) | no            |
+| Cursor                         | GUI editor                | cask                        | in-app (`~/Library/Application Support/Cursor/User/`)       | cask list yes |
+| JetBrainsMono Nerd Font, Inter | terminal/editor icons, UI | nix-darwin `fonts.packages` | `modules/darwin/fonts.nix`                                  | yes           |
 
 ### AI agents
 
@@ -73,15 +73,16 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 
 ### Apps
 
-| App                     | What for                                            | Install                            | Config                                                                                            | Rebuild?       |
-| ----------------------- | --------------------------------------------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------- | -------------- |
-| Zen                     | browser                                             | cask                               | policies via `system.defaults.CustomUserPreferences."app.zen-browser.zen"`, rest via Firefox Sync | yes (policies) |
-| Google Chrome           | second browser: Claude-in-Chrome, omp browser relay | cask                               | in-app; Keystone self-updates                                                                     | -              |
-| SuperCmd v2             | launcher, clipboard, snippets, Raycast extensions   | cask (tap `supercmdlabs/supercmd`) | in-app for now (see FAQ)                                                                          | -              |
-| Bitwarden               | passwords, autofill (system + Zen), SSH agent       | cask                               | in-app (SSH agent, browser integration); Zen policy installs the extension                        | -              |
-| Rectangle               | window snapping                                     | cask                               | `CustomUserPreferences."com.knollsoft.Rectangle"`                                                 | yes            |
-| Caffeinated             | keep awake                                          | mas                                | `CustomUserPreferences."design.yugen.Caffeinated"`                                                | yes            |
-| Spotify, Discord, Slack | the usual                                           | cask                               | account-synced                                                                                    | -              |
+| App                     | What for                                          | Install                            | Config                                                                                  | Rebuild?       |
+| ----------------------- | ------------------------------------------------- | ---------------------------------- | --------------------------------------------------------------------------------------- | -------------- |
+| Google Chrome           | browser                                           | cask                               | managed policy via `CustomSystemPreferences."com.google.Chrome"`; Keystone self-updates | yes (policies) |
+| Claude Desktop          | Claude app, MCP host                              | cask                               | in-app (`~/Library/Application Support/Claude/claude_desktop_config.json`)              | -              |
+| Obsidian                | notes                                             | cask                               | in-app, per vault (`<vault>/.obsidian/`)                                                | -              |
+| SuperCmd v2             | launcher, clipboard, snippets, Raycast extensions | cask (tap `supercmdlabs/supercmd`) | in-app for now (see FAQ)                                                                | -              |
+| Bitwarden               | passwords, autofill (system + Chrome), SSH agent  | cask                               | in-app (SSH agent, browser integration); Chrome policy force-installs the extension     | -              |
+| Rectangle               | window snapping                                   | cask                               | `CustomUserPreferences."com.knollsoft.Rectangle"`                                       | yes            |
+| Caffeinated             | keep awake                                        | mas                                | `CustomUserPreferences."design.yugen.Caffeinated"`                                      | yes            |
+| Spotify, Discord, Slack | the usual                                         | cask                               | account-synced                                                                          | -              |
 
 ### System
 
@@ -177,12 +178,13 @@ indented line.
     ```
 
 11. Things that cannot be declared (one-time, in-app):
-    - [ ] Zen: sign in to Firefox Sync (bookmarks, extensions, settings)
+    - [ ] Chrome: sign in; verify the managed policy landed at `chrome://policy` (Bitwarden force-installed, password manager off)
     - [ ] SuperCmd: grant Accessibility + Screen Recording when asked, set hotkey, sign out of Raycast habits
     - [ ] Bitwarden: unlock with Touch ID, vault timeout, Settings -> "Enable browser integration"
     - [ ] macOS: System Settings -> General -> AutoFill & Passwords: turn **Bitwarden** on, turn iCloud Passwords/Keychain autofill off (Bitwarden is the only password manager)
-    - [ ] Zen: the Bitwarden extension is force-installed by policy and the built-in password manager is disabled; sign in to the extension once
-    - [ ] Chrome: sign in, install the Claude-in-Chrome extension
+    - [ ] Chrome: sign in to the force-installed Bitwarden extension once
+    - [ ] Chrome: install the Claude-in-Chrome extension
+    - [ ] Cursor, Claude Desktop, Obsidian: sign in; point Obsidian at a vault
     - [ ] Chrome: for the omp browser relay, open `chrome://extensions`, enable Developer mode, "Load unpacked" -> `~/.omp/browser-relay/extension` (unpacked for you on every `nrs`), then uncomment `browser.relay: true` in `config/omp/settings.yml`
     - [ ] Rectangle, Caffeinated: allow Accessibility / login items when prompted
     - [ ] Spotify, Discord, Slack: sign in
@@ -306,7 +308,8 @@ Autostart at login: set `my.colima.autostart = true` in `hosts/<name>/default.ni
 - **Why casks for GUI apps and not nixpkgs?** macOS app bundles from nixpkgs are second class (no auto-update, Spotlight/Launch Services quirks). Casks are declarative through nix-darwin and `cleanup = "zap"` keeps the set exact.
 - **Why are configs out of the store?** LazyVim writes `lazy-lock.json`, mise writes `config.toml`, Ghostty reloads live. `mkOutOfStoreSymlink` keeps them editable and still tracked.
 - **Why mise and not nix for node/rust?** Per-project versions (`.mise.toml`, `.nvmrc`) and `cargo install` just work; nix provides mise itself.
-- **Why no nix-managed `~/.config/gh` or `~/.omp`?** Both tools rewrite their own files at runtime.
+- **Why no nix-managed `~/.config/gh` or `~/.omp`?** Both rewrite their own files at runtime, so neither can be a store symlink. `gh`'s `config.yml` and omp's assets are still tracked, just through `mkOutOfStoreSymlink`; omp's `config.yml` is copied in as a writable file by `programs.omp.settings`. Auth (`gh` `hosts.yml`, `~/.omp/agent/agent.db`) stays untracked.
 - **SuperCmd settings?** Electron app, state under `~/Library/Application Support/SuperCmd/`. When it settles into a single settings file, copy it to `config/supercmd/` and add a `link` in `dotfiles.nix`.
 - **Herdr vs tmux?** Both installed. Herdr for agent sessions (mouse-first, `C-b`), tmux for plain shells (`C-a`), so prefixes do not collide.
-- **Claude-in-Chrome / omp browser relay?** Chrome is declared in `casks` for exactly these two. Zen stays the default browser; nothing forces Chrome to be one.
+- **Only one browser?** Yes, Chrome. It is the declared default and carries the managed policy that force-installs Bitwarden and disables Chrome's own password manager, plus it is the Chromium host that Claude-in-Chrome and the omp browser relay need. Zen was removed; its Firefox-style policy block became `CustomSystemPreferences."com.google.Chrome"`.
+- **Why is Chrome policy in `CustomSystemPreferences` and not `CustomUserPreferences`?** Chrome only honours _mandatory_ policy, which on macOS means a domain the user cannot write. The user domain would be treated as advisory and `ExtensionInstallForcelist` would silently not force anything. Check `chrome://policy` after a switch.

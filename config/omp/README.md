@@ -37,8 +37,8 @@ currently does, with exactly three exceptions, all deliberate:
 Because those three live only in the overlay, they depend on `PI_CONFIG_FILES`
 being set. It is exported twice on purpose: `home.sessionVariables` for shells,
 and `launchd.user.envVariables` (`modules/darwin/default.nix`) for everything
-else - GUI-launched apps, and `omp acp` spawned by Zed, neither of which
-descends from a zsh that sourced `.zshenv`.
+else - GUI-launched apps and anything they spawn, none of which descends from
+a zsh that sourced `.zshenv`.
 
 To check what is actually live after a rebuild:
 
