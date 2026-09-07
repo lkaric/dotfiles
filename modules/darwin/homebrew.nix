@@ -6,8 +6,10 @@
     enable = true;
     user = user.name;
     autoMigrate = true;
-    # Third-party taps need explicit trust on Homebrew >= 4.6.
-    trust.taps = [ "supercmdlabs/supercmd" ];
+    # No third-party taps declared. If one is ever added it needs explicit
+    # trust on Homebrew >= 4.6, both here and in `homebrew.taps` below --
+    # otherwise `brew bundle cleanup` aborts on it and stops uninstalling.
+    trust.taps = [ ];
   };
 
   homebrew = {
@@ -21,7 +23,7 @@
       cleanup = "zap";
     };
 
-    taps = [ "supercmdlabs/supercmd" ];
+    taps = [ ];
 
     # CLI tools come from nix. The one exception: `mas` drives the masApps
     # entries below, and it has to be reachable during *system* activation,
@@ -44,7 +46,6 @@
       "obsidian"
       "bitwarden"
       "rectangle"
-      "supercmdlabs/supercmd/supercmd"
       "spotify"
       "discord"
       "slack"

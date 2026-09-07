@@ -85,12 +85,14 @@
 
     };
 
-    # Root-owned domain: Chrome treats values it cannot write as mandatory
-    # policy. ExtensionInstallForcelist in particular only works as mandatory,
-    # which is why this cannot live in CustomUserPreferences. Bitwarden
-    # documents this .plist route for extension deployment. Verify after a
-    # switch at chrome://policy.
-    CustomSystemPreferences."com.google.Chrome" = {
+    # The attribute name is passed to `defaults write` verbatim, and system
+    # activation runs as root -- so a bare "com.google.Chrome" lands in root's
+    # own preference domain (/var/root/Library/Preferences) and Chrome never
+    # sees it. nix-darwin's own built-ins pass a full path for the same reason.
+    # /Library/Preferences is the machine-wide domain Chrome reads policy from
+    # and the .plist route Bitwarden documents for extension deployment.
+    # Verify after a switch at chrome://policy.
+    CustomSystemPreferences."/Library/Preferences/com.google.Chrome" = {
       # Bitwarden owns passwords: built-in manager off, extension forced.
       # nngceckbapebfimnlniiiahkandclblb is the Bitwarden extension id.
       ExtensionInstallForcelist = [
