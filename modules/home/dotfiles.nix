@@ -28,5 +28,9 @@ in
     ".omp/agent/agents".source = link "omp/agents";
     ".omp/agent/skills".source = link "omp/skills";
     ".omp/agent/WATCHDOG.md".source = link "omp/WATCHDOG.md";
+
+    # Cursor rewrites this file too (Settings UI), same rule as gh above:
+    # symlink into the repo so either side's edits are live.
+    "Library/Application Support/Cursor/User/settings.json".source = link "cursor/settings.json";
   };
 }
