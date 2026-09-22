@@ -43,6 +43,8 @@
       # Claude Desktop. MCP config at
       # ~/Library/Application Support/Claude/claude_desktop_config.json.
       "claude"
+      # Paper: design tool for interfaces and prototypes (paper.design).
+      "paper-design"
       "obsidian"
       "bitwarden"
       "rectangle"
