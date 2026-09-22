@@ -79,9 +79,14 @@
         };
       };
 
-      "design.yugen.Caffeinated" = {
-        showWelcomeWindowAtLaunch = false;
-      };
+      # Disabled: writing to this sandboxed container's Preferences domain
+      # fails with "Could not write domain ...; exiting" whenever macOS has
+      # reset Full Disk Access for the terminal running `nrs` (happens after
+      # OS updates -- see README troubleshooting table). Re-enable once FDA
+      # is re-granted in System Settings -> Privacy & Security.
+      # "design.yugen.Caffeinated" = {
+      #   showWelcomeWindowAtLaunch = false;
+      # };
 
     };
 
