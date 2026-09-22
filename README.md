@@ -10,7 +10,7 @@ One rule: **Nix owns what is installed and how it is wired; `config/` owns how
 things look and behave.**
 
 - Rebuild (`nrs`) when you add a package, cask, font, runtime, or change a git/ssh identity or a macOS default.
-- Never rebuild for Neovim, Ghostty, starship, sheldon, tmux, mise, atuin or Herdr config: those files live in `config/` and are symlinked into `~` out of the nix store, so edits are live.
+- Never rebuild for Neovim, Ghostty, starship, sheldon, tmux, mise, atuin, Herdr or Cursor config: those files live in `config/` and are symlinked into `~` out of the nix store, so edits are live.
 
 ```
 flake.nix                  inputs + one darwinConfiguration per host
@@ -45,7 +45,7 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 | Tool                           | What for                  | Install                     | Config                                                      | Rebuild?      |
 | ------------------------------ | ------------------------- | --------------------------- | ----------------------------------------------------------- | ------------- |
 | Neovim + LazyVim               | editor                    | nix                         | `config/nvim/` (starter layout, `lazy-lock.json` committed) | no            |
-| Cursor                         | GUI editor                | cask                        | in-app (`~/Library/Application Support/Cursor/User/`)       | cask list yes |
+| Cursor                         | GUI editor                | cask                        | `config/cursor/settings.json` (rest in-app, untracked)      | cask list yes |
 | JetBrainsMono Nerd Font, Inter | terminal/editor icons, UI | nix-darwin `fonts.packages` | `modules/darwin/fonts.nix`                                  | yes           |
 
 ### AI agents
@@ -277,17 +277,18 @@ nixfmt (`*.nix`), stylua (`*.lua`), taplo (`*.toml`), prettier (`*.md|yml|yaml|j
 
 ## ⏪ Rollback and recovery
 
-| Situation                                                       | Do                                                                                                                                                                                                                 |
-| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Last `nrs` broke something                                      | `darwin-rebuild --list-generations`, then `sudo darwin-rebuild --rollback` (or `--switch-generation N`)                                                                                                            |
-| Flake update broke a build                                      | `git checkout flake.lock && nrs`                                                                                                                                                                                   |
-| HM refuses: "would be clobbered"                                | it moved the file to `<file>.bak`; diff, delete the `.bak`, `nrs`                                                                                                                                                  |
-| Homebrew cleanup removed an app you wanted                      | add it to `casks`, `nrs` (with `cleanup = "zap"` anything undeclared is removed on switch)                                                                                                                         |
-| Cleanup says "Unable to remove some files ... Full Disk Access" | `--zap` deletes app data under `~/Library`; give your terminal (Ghostty) Full Disk Access in System Settings -> Privacy & Security, restart it, `nrs` again                                                        |
-| Cleanup says "Refusing to load cask ... from untrusted tap"     | `brew trust <tap>` once (stored in `~/.config/homebrew/trust.json`); also declare it in `nix-homebrew.trust.taps`. Until then the error **aborts the whole cleanup**, so unrelated undeclared casks stay installed |
-| Bitwarden SSH prompt blocks git/ssh                             | Bitwarden asks to authorize each key use; approve in the app (tick remember). Without the app running or unlocked, ssh and commit signing fail                                                                     |
-| Shell broken                                                    | `/bin/zsh -f`, then `nrs`; the previous generation is always bootable                                                                                                                                              |
-| Disk full                                                       | `ncg`                                                                                                                                                                                                              |
+| Situation                                                                             | Do                                                                                                                                                                                                                      |
+| ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Last `nrs` broke something                                                            | `darwin-rebuild --list-generations`, then `sudo darwin-rebuild --rollback` (or `--switch-generation N`)                                                                                                                 |
+| Flake update broke a build                                                            | `git checkout flake.lock && nrs`                                                                                                                                                                                        |
+| HM refuses: "would be clobbered"                                                      | it moved the file to `<file>.bak`; diff, delete the `.bak`, `nrs`                                                                                                                                                       |
+| Homebrew cleanup removed an app you wanted                                            | add it to `casks`, `nrs` (with `cleanup = "zap"` anything undeclared is removed on switch)                                                                                                                              |
+| Cleanup says "Unable to remove some files ... Full Disk Access"                       | `--zap` deletes app data under `~/Library`; give your terminal (Ghostty) Full Disk Access in System Settings -> Privacy & Security, restart it, `nrs` again                                                             |
+| `user defaults...` fails: "Could not write domain .../Containers/.../Preferences/..." | macOS reset Full Disk Access for your terminal app (common after a macOS update). Re-grant it in System Settings -> Privacy & Security -> Full Disk Access (toggle off/on or re-add), restart the terminal, `nrs` again |
+| Cleanup says "Refusing to load cask ... from untrusted tap"                           | `brew trust <tap>` once (stored in `~/.config/homebrew/trust.json`); also declare it in `nix-homebrew.trust.taps`. Until then the error **aborts the whole cleanup**, so unrelated undeclared casks stay installed      |
+| Bitwarden SSH prompt blocks git/ssh                                                   | Bitwarden asks to authorize each key use; approve in the app (tick remember). Without the app running or unlocked, ssh and commit signing fail                                                                          |
+| Shell broken                                                                          | `/bin/zsh -f`, then `nrs`; the previous generation is always bootable                                                                                                                                                   |
+| Disk full                                                                             | `ncg`                                                                                                                                                                                                                   |
 
 ## 🐳 Docker via Colima
 
