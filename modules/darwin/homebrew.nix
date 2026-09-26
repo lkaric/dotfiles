@@ -33,8 +33,8 @@
 
     casks = [
       "ghostty"
-      # Editor. Cursor self-updates (cask auto_updates: true); settings live in
-      # ~/Library/Application Support/Cursor/User/ and are not tracked yet.
+      # Editor. Cursor self-updates (cask auto_updates: true); settings
+      # tracked via config/cursor/settings.json (modules/home/dotfiles.nix).
       "cursor"
       # Only browser. Managed policy lives in system-defaults.nix
       # (CustomSystemPreferences) because Chrome honours mandatory policy from
@@ -43,6 +43,8 @@
       # Claude Desktop. MCP config at
       # ~/Library/Application Support/Claude/claude_desktop_config.json.
       "claude"
+      # Claude Code: terminal-based AI coding assistant CLI (`claude`).
+      "claude-code"
       # Paper: design tool for interfaces and prototypes (paper.design).
       "paper-design"
       "obsidian"
