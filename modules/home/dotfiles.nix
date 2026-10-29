@@ -20,15 +20,7 @@ in
     "gh/config.yml".source = link "gh/config.yml";
   };
 
-  # omp reads these but never writes them, so they are safe to symlink into the
-  # otherwise-mutable ~/.omp. Settings live in config/omp/settings.yml, loaded
-  # via PI_CONFIG_FILES (modules/home/agents.nix) rather than symlinked over
-  # config.yml, which omp rewrites.
   home.file = {
-    ".omp/agent/agents".source = link "omp/agents";
-    ".omp/agent/skills".source = link "omp/skills";
-    ".omp/agent/WATCHDOG.md".source = link "omp/WATCHDOG.md";
-
     # Cursor rewrites this file too (Settings UI), same rule as gh above:
     # symlink into the repo so either side's edits are live.
     "Library/Application Support/Cursor/User/settings.json".source = link "cursor/settings.json";

@@ -16,10 +16,8 @@
 
     nix-homebrew.url = "github:zhaofengli/nix-homebrew";
 
-    # AI agents, both pinned via flake.lock. They carry their own nixpkgs pin on
-    # purpose (Rust toolchain / bun2nix are tested against it); bump with
-    # `nix flake update omp herdr`.
-    omp.url = "github:can1357/oh-my-pi";
+    # Herdr, pinned to a tag via flake.lock. It carries its own nixpkgs pin on
+    # purpose (its Rust toolchain is tested against it); bump the tag below.
     herdr.url = "github:herdrdev/herdr/v0.8.2";
   };
 

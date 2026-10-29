@@ -43,14 +43,13 @@
       # Claude Desktop. MCP config at
       # ~/Library/Application Support/Claude/claude_desktop_config.json.
       "claude"
-      # Paper: design tool for interfaces and prototypes (paper.design).
-      "paper-design"
+      # JetBrains database IDE.
+      "datagrip"
       "obsidian"
       "bitwarden"
       "rectangle"
       "spotify"
       "discord"
-      "slack"
     ];
 
     # App Store apps (needs Apple ID sign-in once). nix-darwin installs `mas`.
