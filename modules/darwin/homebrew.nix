@@ -45,6 +45,8 @@
       "claude"
       # Paper: design tool for interfaces and prototypes (paper.design).
       "paper-design"
+      # JetBrains database IDE.
+      "datagrip"
       "obsidian"
       "bitwarden"
       "rectangle"
