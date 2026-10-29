@@ -77,6 +77,7 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 | Google Chrome    | browser                                          | cask    | managed policy via `CustomSystemPreferences."com.google.Chrome"`; Keystone self-updates | yes (policies) |
 | Claude Desktop   | Claude app, MCP host                             | cask    | in-app (`~/Library/Application Support/Claude/claude_desktop_config.json`)              | -              |
 | Obsidian         | notes                                            | cask    | in-app, per vault (`<vault>/.obsidian/`)                                                | -              |
+| Notion           | notes, docs, wikis                               | cask    | in-app, account-synced                                                                  | -              |
 | DataGrip         | database IDE                                     | cask    | in-app (JetBrains account / settings sync)                                              | -              |
 | Bitwarden        | passwords, autofill (system + Chrome), SSH agent | cask    | in-app (SSH agent, browser integration); Chrome policy force-installs the extension     | -              |
 | Rectangle        | window snapping                                  | cask    | `CustomUserPreferences."com.knollsoft.Rectangle"`                                       | yes            |
