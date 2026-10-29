@@ -52,7 +52,6 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 
 | Tool             | What for                                             | Install                | Config                                                                             | Rebuild?                |
 | ---------------- | ---------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------- | ----------------------- |
-| Oh My Pi (`omp`) | terminal coding agent                                | flake (`programs.omp`) | `config/omp/` (settings, agents, skills, WATCHDOG.md) - see `config/omp/README.md` | settings yes, assets no |
 | Herdr            | agent workspace manager / multiplexer (prefix `C-b`) | flake                  | `config/herdr/config.toml`                                                         | no                      |
 
 ### Dev runtimes and git
@@ -78,10 +77,11 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 | Google Chrome           | browser                                          | cask    | managed policy via `CustomSystemPreferences."com.google.Chrome"`; Keystone self-updates | yes (policies) |
 | Claude Desktop          | Claude app, MCP host                             | cask    | in-app (`~/Library/Application Support/Claude/claude_desktop_config.json`)              | -              |
 | Obsidian                | notes                                            | cask    | in-app, per vault (`<vault>/.obsidian/`)                                                | -              |
+| DataGrip                | database IDE                                     | cask    | in-app (JetBrains account / settings sync)                                              | -              |
 | Bitwarden               | passwords, autofill (system + Chrome), SSH agent | cask    | in-app (SSH agent, browser integration); Chrome policy force-installs the extension     | -              |
 | Rectangle               | window snapping                                  | cask    | `CustomUserPreferences."com.knollsoft.Rectangle"`                                       | yes            |
 | Caffeinated             | keep awake                                       | mas     | `CustomUserPreferences."design.yugen.Caffeinated"`                                      | yes            |
-| Spotify, Discord, Slack | the usual                                        | cask    | account-synced                                                                          | -              |
+| Spotify, Discord        | the usual                                        | cask    | account-synced                                                                          | -              |
 
 ### System
 
@@ -120,7 +120,7 @@ indented line.
    mkdir -p ~/git && git clone https://github.com/<you>/dotfiles ~/git/dotfiles && cd ~/git/dotfiles
    ```
 
-4. First switch. This installs Homebrew (nix-homebrew), every cask and App Store app, fonts, macOS defaults, the wallpaper, your shell, and all CLI tools. It takes a while the first time (Herdr and omp build from source). Give the terminal you run it from Full Disk Access first (System Settings -> Privacy & Security), otherwise Homebrew's cleanup cannot remove app data later.
+4. First switch. This installs Homebrew (nix-homebrew), every cask and App Store app, fonts, macOS defaults, the wallpaper, your shell, and all CLI tools. It takes a while the first time (Herdr builds from source). Give the terminal you run it from Full Disk Access first (System Settings -> Privacy & Security), otherwise Homebrew's cleanup cannot remove app data later.
 
    ```sh
    sudo nix run nix-darwin/master#darwin-rebuild -- switch --flake .#hephaestus
@@ -183,9 +183,8 @@ indented line.
     - [ ] Chrome: sign in to the force-installed Bitwarden extension once
     - [ ] Chrome: install the Claude-in-Chrome extension
     - [ ] Cursor, Claude Desktop, Obsidian: sign in; point Obsidian at a vault
-    - [ ] Chrome: for the omp browser relay, open `chrome://extensions`, enable Developer mode, "Load unpacked" -> `~/.omp/browser-relay/extension` (unpacked for you on every `nrs`), then uncomment `browser.relay: true` in `config/omp/settings.yml`
     - [ ] Rectangle, Caffeinated: allow Accessibility / login items when prompted
-    - [ ] Spotify, Discord, Slack: sign in
+    - [ ] Spotify, Discord: sign in
     - [ ] Terminal -> System Events automation prompt (wallpaper step): allow
     - [ ] Wallpaper: if `nrs` printed "not found", pick Chroma Blue once in System Settings -> Wallpaper, then `nrs`
 
@@ -224,7 +223,7 @@ Editing anything in `config/` needs nothing else. Commit when happy; lefthook fo
 | Layer                             | How                                                                                                                   |
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | nixpkgs, nix-darwin, home-manager | `nup`, or `nix flake update nixpkgs` then `nrs`                                                                       |
-| omp, Herdr                        | `nix flake update omp herdr` then `nrs`. For Herdr pin a new tag in `flake.nix` (`github:herdrdev/herdr/vX.Y.Z`)      |
+| Herdr                             | pin a new tag in `flake.nix` (`github:herdrdev/herdr/vX.Y.Z`), then `nix flake update herdr` and `nrs`               |
 | Homebrew casks                    | `brew update && brew upgrade` (part of `nup`), or set `homebrew.onActivation.upgrade = true` to do it on every `nrs`  |
 | App Store apps                    | App Store updates, or `mas upgrade`                                                                                   |
 | mise runtimes                     | `mise upgrade` (within the declared specs), `mise use -g node@lts` to change a spec, commit `config/mise/config.toml` |
@@ -307,7 +306,7 @@ Autostart at login: set `my.colima.autostart = true` in `hosts/<name>/default.ni
 - **Why casks for GUI apps and not nixpkgs?** macOS app bundles from nixpkgs are second class (no auto-update, Spotlight/Launch Services quirks). Casks are declarative through nix-darwin and `cleanup = "zap"` keeps the set exact.
 - **Why are configs out of the store?** LazyVim writes `lazy-lock.json`, mise writes `config.toml`, Ghostty reloads live. `mkOutOfStoreSymlink` keeps them editable and still tracked.
 - **Why mise and not nix for node/rust?** Per-project versions (`.mise.toml`, `.nvmrc`) and `cargo install` just work; nix provides mise itself.
-- **Why no nix-managed `~/.config/gh` or `~/.omp`?** Both rewrite their own files at runtime, so neither can be a store symlink. `gh`'s `config.yml` and omp's assets are still tracked, just through `mkOutOfStoreSymlink`; omp's `config.yml` is copied in as a writable file by `programs.omp.settings`. Auth (`gh` `hosts.yml`, `~/.omp/agent/agent.db`) stays untracked.
+- **Why no nix-managed `~/.config/gh`?** gh rewrites its own files at runtime, so it cannot be a store symlink. `config.yml` is still tracked, just through `mkOutOfStoreSymlink`. Auth (`hosts.yml`) stays untracked.
 - **Herdr vs tmux?** Both installed. Herdr for agent sessions (mouse-first, `C-b`), tmux for plain shells (`C-a`), so prefixes do not collide.
-- **Only one browser?** Yes, Chrome. It is the declared default and carries the managed policy that force-installs Bitwarden and disables Chrome's own password manager, plus it is the Chromium host that Claude-in-Chrome and the omp browser relay need. Zen was removed; its Firefox-style policy block became `CustomSystemPreferences."/Library/Preferences/com.google.Chrome"`.
+- **Only one browser?** Yes, Chrome. It is the declared default and carries the managed policy that force-installs Bitwarden and disables Chrome's own password manager, plus it is the Chromium host that Claude-in-Chrome needs. Zen was removed; its Firefox-style policy block became `CustomSystemPreferences."/Library/Preferences/com.google.Chrome"`.
 - **Why is Chrome policy in `CustomSystemPreferences` and not `CustomUserPreferences`?** Chrome only honours _mandatory_ policy, which on macOS means a domain the user cannot write. The attribute name is handed to `defaults write` as-is and activation runs as root, so it has to be the full path `/Library/Preferences/com.google.Chrome`; a bare bundle id lands in root's own preference domain and Chrome never reads it. Check `chrome://policy` after a switch.
