@@ -52,7 +52,6 @@
       "rectangle"
       "spotify"
       "discord"
-      "slack"
     ];
 
     # App Store apps (needs Apple ID sign-in once). nix-darwin installs `mas`.
