@@ -48,6 +48,7 @@
       # JetBrains database IDE.
       "datagrip"
       "obsidian"
+      "notion"
       "bitwarden"
       "rectangle"
       "spotify"
