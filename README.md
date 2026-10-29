@@ -50,9 +50,9 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 
 ### AI agents
 
-| Tool             | What for                                             | Install                | Config                                                                             | Rebuild?                |
-| ---------------- | ---------------------------------------------------- | ---------------------- | ---------------------------------------------------------------------------------- | ----------------------- |
-| Herdr            | agent workspace manager / multiplexer (prefix `C-b`) | flake                  | `config/herdr/config.toml`                                                         | no                      |
+| Tool  | What for                                             | Install | Config                     | Rebuild? |
+| ----- | ---------------------------------------------------- | ------- | -------------------------- | -------- |
+| Herdr | agent workspace manager / multiplexer (prefix `C-b`) | flake   | `config/herdr/config.toml` | no       |
 
 ### Dev runtimes and git
 
@@ -72,16 +72,16 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 
 ### Apps
 
-| App                     | What for                                         | Install | Config                                                                                  | Rebuild?       |
-| ----------------------- | ------------------------------------------------ | ------- | --------------------------------------------------------------------------------------- | -------------- |
-| Google Chrome           | browser                                          | cask    | managed policy via `CustomSystemPreferences."com.google.Chrome"`; Keystone self-updates | yes (policies) |
-| Claude Desktop          | Claude app, MCP host                             | cask    | in-app (`~/Library/Application Support/Claude/claude_desktop_config.json`)              | -              |
-| Obsidian                | notes                                            | cask    | in-app, per vault (`<vault>/.obsidian/`)                                                | -              |
-| DataGrip                | database IDE                                     | cask    | in-app (JetBrains account / settings sync)                                              | -              |
-| Bitwarden               | passwords, autofill (system + Chrome), SSH agent | cask    | in-app (SSH agent, browser integration); Chrome policy force-installs the extension     | -              |
-| Rectangle               | window snapping                                  | cask    | `CustomUserPreferences."com.knollsoft.Rectangle"`                                       | yes            |
-| Caffeinated             | keep awake                                       | mas     | `CustomUserPreferences."design.yugen.Caffeinated"`                                      | yes            |
-| Spotify, Discord        | the usual                                        | cask    | account-synced                                                                          | -              |
+| App              | What for                                         | Install | Config                                                                                  | Rebuild?       |
+| ---------------- | ------------------------------------------------ | ------- | --------------------------------------------------------------------------------------- | -------------- |
+| Google Chrome    | browser                                          | cask    | managed policy via `CustomSystemPreferences."com.google.Chrome"`; Keystone self-updates | yes (policies) |
+| Claude Desktop   | Claude app, MCP host                             | cask    | in-app (`~/Library/Application Support/Claude/claude_desktop_config.json`)              | -              |
+| Obsidian         | notes                                            | cask    | in-app, per vault (`<vault>/.obsidian/`)                                                | -              |
+| DataGrip         | database IDE                                     | cask    | in-app (JetBrains account / settings sync)                                              | -              |
+| Bitwarden        | passwords, autofill (system + Chrome), SSH agent | cask    | in-app (SSH agent, browser integration); Chrome policy force-installs the extension     | -              |
+| Rectangle        | window snapping                                  | cask    | `CustomUserPreferences."com.knollsoft.Rectangle"`                                       | yes            |
+| Caffeinated      | keep awake                                       | mas     | `CustomUserPreferences."design.yugen.Caffeinated"`                                      | yes            |
+| Spotify, Discord | the usual                                        | cask    | account-synced                                                                          | -              |
 
 ### System
 
@@ -223,7 +223,7 @@ Editing anything in `config/` needs nothing else. Commit when happy; lefthook fo
 | Layer                             | How                                                                                                                   |
 | --------------------------------- | --------------------------------------------------------------------------------------------------------------------- |
 | nixpkgs, nix-darwin, home-manager | `nup`, or `nix flake update nixpkgs` then `nrs`                                                                       |
-| Herdr                             | pin a new tag in `flake.nix` (`github:herdrdev/herdr/vX.Y.Z`), then `nix flake update herdr` and `nrs`               |
+| Herdr                             | pin a new tag in `flake.nix` (`github:herdrdev/herdr/vX.Y.Z`), then `nix flake update herdr` and `nrs`                |
 | Homebrew casks                    | `brew update && brew upgrade` (part of `nup`), or set `homebrew.onActivation.upgrade = true` to do it on every `nrs`  |
 | App Store apps                    | App Store updates, or `mas upgrade`                                                                                   |
 | mise runtimes                     | `mise upgrade` (within the declared specs), `mise use -g node@lts` to change a spec, commit `config/mise/config.toml` |
