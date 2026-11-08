@@ -48,11 +48,11 @@
       # JetBrains database IDE.
       "datagrip"
       "obsidian"
-      "notion"
       "bitwarden"
       "rectangle"
       "spotify"
       "discord"
+      "telegram"
     ];
 
     # App Store apps (needs Apple ID sign-in once). nix-darwin installs `mas`.
