@@ -83,6 +83,7 @@ Install column: `nix` = nixpkgs via home-manager, `cask` = Homebrew cask via nix
 | Rectangle        | window snapping                                  | cask    | `CustomUserPreferences."com.knollsoft.Rectangle"`                                       | yes            |
 | Caffeinated      | keep awake                                       | mas     | `CustomUserPreferences."design.yugen.Caffeinated"`                                      | yes            |
 | Spotify, Discord | the usual                                        | cask    | account-synced                                                                          | -              |
+| Telegram         | messaging                                        | cask    | account-synced                                                                          | -              |
 
 ### System
 
@@ -185,7 +186,7 @@ indented line.
     - [ ] Chrome: install the Claude-in-Chrome extension
     - [ ] Cursor, Claude Desktop, Obsidian: sign in; point Obsidian at a vault
     - [ ] Rectangle, Caffeinated: allow Accessibility / login items when prompted
-    - [ ] Spotify, Discord: sign in
+    - [ ] Spotify, Discord, Telegram: sign in
     - [ ] Terminal -> System Events automation prompt (wallpaper step): allow
     - [ ] Wallpaper: if `nrs` printed "not found", pick Chroma Blue once in System Settings -> Wallpaper, then `nrs`
 
